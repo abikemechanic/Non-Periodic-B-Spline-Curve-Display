@@ -7,28 +7,27 @@ import random
 
 
 class MainWindow(QtWidgets.QMainWindow):
+
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
-        self.graph_widget = pg.PlotWidget()
-        self.setCentralWidget(self.graph_widget)
-
         x = []
         y = []
-
         for i in range(10):
-            x.append(random.randrange(1, 20, 1))
-            y.append(random.randrange(1, 40, 2))
+            x.append(random.randrange(1, 200, 1))
+            y.append(random.randrange(1, 400, 2))
 
         print(x)
         print(y)
 
-        self.graph_widget.plot(x, y)
+        uic.loadUi("mainwindow.ui", self)
+        self.plot(x, y)
 
-        # uic.loadUi('mainwindow.ui', self)
+    def plot(self, x, y):
+        self.graphWidget.plot(x, y)
 
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
 window.show()
-app.exec_()
+sys.exit(app.exec_())
