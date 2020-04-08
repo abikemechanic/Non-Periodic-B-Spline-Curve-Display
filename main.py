@@ -1,11 +1,7 @@
 import sys
-from pyqtgraph import PlotWidget, plot
-import pyqtgraph as pg
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5 import uic
-import random
+from PyQt5 import QtWidgets
 
-from main_window import MainWindow
+from UI.main_window import MainWindow
 from control_point import ControlPoint
 from b_spline_curve import BSplineCurve
 

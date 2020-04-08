@@ -34,9 +34,9 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="1">
-      <widget class="QTableWidget" name="tableWidget">
+      <widget class="QTableWidget" name="table_ControlPoints">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -48,15 +48,20 @@
         <enum>QFrame::Plain</enum>
        </property>
        <property name="sizeAdjustPolicy">
-        <enum>QAbstractScrollArea::AdjustToContents</enum>
+        <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
        </property>
        <property name="rowCount">
-        <number>11</number>
+        <number>10</number>
        </property>
        <property name="columnCount">
         <number>3</number>
        </property>
-       <row/>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
        <row/>
        <row/>
        <row/>

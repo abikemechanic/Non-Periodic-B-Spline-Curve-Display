@@ -4,6 +4,10 @@ class BlendingFunction:
         self.k = k
         self.limit = limit
 
-    def __eq__(self, other):
-        # if the ends of the limits are the same then the
-        return self.limit[0] == other.limit[0] & self.limit[1] == other.limit[1]
+    def blending_func(self):
+        if self.limit[0] == self.limit[1]:
+            return 0
+        elif self.k == 1:
+            return 1
+        else:
+            pass
