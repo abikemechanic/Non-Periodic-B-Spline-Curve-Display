@@ -17,12 +17,31 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graphWidget = None
         uic.loadUi("UI/mainwindow.ui", self)
 
+        # exit button
         self.btn_Exit: QtWidgets.QPushButton
         self.btn_Exit.clicked.connect(self.exit_program)
+
+        # Create Graph Button
+        self.btn_Graph_2: QtWidgets.QPushButton
+        self.btn_Graph_2.clicked.connect(self.update_graph)
+
+        # Clear control points table
+        self.btn_DeleteAllPoints: QtWidgets.QPushButton
+        self.btn_DeleteAllPoints.clicked.connect(self.clear_control_point_table)
+
+        self.checkBox_ContinuousUpdate: QtWidgets.QCheckBox
+        self.checkBox_ContinuousUpdate.stateChanged.connect(self.set_continuous_update)
 
         self.table_ControlPoints = PointTable(self.table_ControlPoints)
         self.table_ControlPoints.table_value_changed.connect(self.plot)
 
+        self.plot()
+
+    def clear_control_point_table(self):
+        print('cleared control point table')
+        self.table_ControlPoints.clear()
+
+    def update_graph(self):
         self.plot()
 
     def plot(self):
@@ -38,7 +57,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graphWidget.plot(x, y)
 
     def set_continuous_update(self, val):
-        self.continuous_update = val
+        self.continuous_update = bool(val)
+        print(bool(val))
 
     @staticmethod
     def exit_program(self):

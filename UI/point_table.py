@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import  pyqtSignal
+from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
 
 
@@ -16,6 +16,7 @@ class PointTable(QtWidgets.QTableWidget):
     def __init__(self, table_widget: QtWidgets.QTableWidget):
         super(PointTable, self).__init__()
 
+        self.table: QtWidgets.QTableWidget
         self.table = table_widget
         self.table.setHorizontalHeaderLabels(self.header_labels)
 
@@ -30,3 +31,14 @@ class PointTable(QtWidgets.QTableWidget):
     def update_graph(self):
         print('item changed')
         self.table_value_changed.emit()
+
+    def clear(self):
+        self.table.itemChanged.disconnect()
+
+        for i in range(self.table.rowCount()):
+            for j in range(1, 3):
+                item = QtWidgets.QTableWidgetItem()
+                item.setText('')
+                self.table.setItem(i, j, item)
+
+        self.table.itemChanged.connect(self.update_graph)
