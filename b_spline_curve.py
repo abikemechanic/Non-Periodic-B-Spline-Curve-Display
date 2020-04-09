@@ -4,10 +4,9 @@ from typing import List
 
 
 class BSplineCurve:
-    def __init__(self, points: List[ControlPoint], k = 3):
+    def __init__(self, points: List[ControlPoint], k=3):
         self.points = points
         self.k = k              # degree of curve
-
         self.knot_vector = []
 
         self.create_knot_vector()
