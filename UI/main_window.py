@@ -40,7 +40,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Control point table
         self.table_ControlPoints = PointTable(self.table_ControlPoints)
-        self.table_ControlPoints.table_value_changed.connect(self.plot)
+        self.table_ControlPoints.table_value_changed.connect(self.auto_update_graph)
 
     def clear_control_point_table(self):
         print('cleared control point table')
@@ -49,9 +49,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def generate_random_points(self):
         self.table_ControlPoints.generate_random_control_points()
 
+    def auto_update_graph(self, control_points):
+        if self.continuous_update:
+            self.plot(control_points)
+
     def update_graph(self):
-        pts = self.table_ControlPoints.get_control_points()
-        self.plot(pts)
+        self.plot(self.table_ControlPoints.get_control_points())
 
     def plot(self, control_points):
         self.graphWidget.clear()

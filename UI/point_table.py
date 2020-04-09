@@ -48,12 +48,14 @@ class PointTable(QtWidgets.QTableWidget):
                 self.table.setItem(i, j, item)
 
         self.table.itemChanged.connect(self.update_graph)
+        self.table_value_changed.emit(self.get_control_points())
 
     def generate_random_control_points(self):
         x = []
         y = []
 
         self.table.itemChanged.disconnect()
+
         for i in range(self.table.rowCount()):
             x.append(random.randint(i, 5 + i*4))
             y.append(random.randint(i, i*4 + 3))

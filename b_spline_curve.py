@@ -31,5 +31,4 @@ class BSplineCurve:
         for i in range(3):
             knot_vector.append(val)
 
-        print(knot_vector)
         self.knot_vector = knot_vector
