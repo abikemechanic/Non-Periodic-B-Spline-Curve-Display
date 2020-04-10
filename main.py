@@ -11,7 +11,7 @@ for i in range(1, 10):
     cp = ControlPoint(i, i + 2)
     cp_list.append(cp)
 
-b_curve = BSplineCurve(cp_list)
+# b_curve = BSplineCurve(cp_list)
 
 
 app = QtWidgets.QApplication(sys.argv)

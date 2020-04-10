@@ -5,8 +5,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
 import random
+from typing import List
 
 from UI.point_table import PointTable
+from b_spline_curve import BSplineCurve
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -15,6 +17,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.graphWidget = None
+        self.b_curve = None
         uic.loadUi("UI/mainwindow.ui", self)
 
         # exit button
@@ -66,6 +69,11 @@ class MainWindow(QtWidgets.QMainWindow):
             y.append(pt.y)
 
         self.graphWidget.plot(x, y)
+        self.b_curve = BSplineCurve(control_points)
+        self.plot_curve()
+
+    def plot_curve(self):
+        self.graphWidget.plot(self.b_curve.p_x, self.b_curve.p_y)
 
     def set_continuous_update(self, val):
         self.continuous_update = bool(val)
