@@ -25,7 +25,7 @@ class BSplineCurve:
         """
         point_count = len(self.points)  # number of control points
 
-        knot_vector_size = point_count + 1 + self.k
+        knot_vector_size = point_count + self.k     # point_count = n + 1
         assert knot_vector_size >= self.k * 2
 
         knot_vector = [0, 0, 0]
@@ -62,15 +62,19 @@ class BSplineCurve:
         p_x = []
         p_y = []
         for u in range(self.knot_vector[-1] * 10):
-            p = 0.0
+            n = 0.0
 
-            for i in self.blending_functions[self.k-1][:]:
-                p_ = i.blending_func(u/10)
-                print(p_)
-                p = p + p_
+            i = 0
+            for bf in self.blending_functions[self.k-1][:-1]:
+                # use only the last column of blending functions
+                if bf.limit[0] == bf.limit[1]:
+                    continue
 
-            print('u = ' + str(u))
-            print('p = ' + str(p))
+                n_ = bf.blending_func(u/10)
+                n_ = n_ * self.points[i].x
+                print(n_)
+                n = n + n_
+                i += 1
             
             self.p_x.append(u)
-            self.p_y.append(p)
+            self.p_y.append(n)
