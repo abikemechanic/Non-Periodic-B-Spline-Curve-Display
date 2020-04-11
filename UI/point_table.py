@@ -33,7 +33,7 @@ class PointTable(QtWidgets.QTableWidget):
     def update_graph(self):
         cp_list = self.get_control_points()
 
-        if len(cp_list) == 0:
+        if len(cp_list) <= 2:
             return
 
         self.table_value_changed.emit(cp_list)
