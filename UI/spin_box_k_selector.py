@@ -11,8 +11,6 @@ class SpinBoxKSelector(QtWidgets.QSpinBox):
         self.k_selector = spin_box_widget
         self._k = 3
         self.k_selector.setValue(self.k)
-        self.k_selector.setMinimum(2)
-        self.k_selector.setMaximum(7)
         self.k_selector.valueChanged.connect(self.value_changed)
 
     @property
@@ -21,16 +19,17 @@ class SpinBoxKSelector(QtWidgets.QSpinBox):
 
     @k.setter
     def k(self, value):
-        self.k_selector.setValue(value)
-        self._k = value
-        self.k_value_changed.emit(value)
-        print(value)
+        if self.k == value:
+            return
 
-    def value_changed(self):
-        val = self.k_selector.value()
+        self.k_selector.setValue(value)
+        self.k_value_changed.emit(value)
+        self._k = value
+
+    def value_changed(self, val):
         if val < 3:
-            self.k = 3
+            val = 3
         elif val > 7:
-            self.k = 7
-        else:
-            self.k = val
+            val = 7
+
+        self.k = val
