@@ -19,9 +19,6 @@ class SpinBoxKSelector(QtWidgets.QSpinBox):
 
     @k.setter
     def k(self, value):
-        if self.k == value:
-            return
-
         self.k_selector.setValue(value)
         self.k_value_changed.emit(value)
         self._k = value

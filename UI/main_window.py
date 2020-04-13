@@ -28,6 +28,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.b_curve = BSplineCurve(None, self.k)
         self.b_curve.knot_vector_changed.connect(self.update_knot_vector)
         self.b_curve.curve_points_changed.connect(self.auto_plot_curve)
+        self.b_curve.failure_message.connect(self.update_failure_message)
 
         # Exit button
         self.btn_Exit: QtWidgets.QPushButton
@@ -59,11 +60,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graphWidget.setBackground('w')
 
         # Spinbox K Selector
-        self.spinBox_k: QtWidgets.QSpinBox = SpinBoxKSelector(self.spinBox_k)
+        self.spinBox_k: SpinBoxKSelector = SpinBoxKSelector(self.spinBox_k)
         self.spinBox_k.k_value_changed.connect(self.update_k_value)
 
         # Line edit knot vector
         self.lineEdit_KnotVector: QtWidgets.QLineEdit = self.lineEdit_KnotVector
+
+        # Message Display
+        self.lbl_FailureMessage: QtWidgets.QLabel
 
     # PROPERTIES
     @property
@@ -84,8 +88,10 @@ class MainWindow(QtWidgets.QMainWindow):
         if self._control_points != value:
             self._control_points = value
             self.graphWidget.clear()
-            
-        self.plot_control_polygon(value)
+
+        if self.continuous_update:
+            self.auto_plot_control_polygon(value)
+
         self.b_curve.points = value
 
     @property
@@ -107,7 +113,7 @@ class MainWindow(QtWidgets.QMainWindow):
     # def update_graph(self):
     #     self.b_curve.create_b_spline_curve()
 
-    def plot_control_polygon(self, control_points: List[ControlPoint]):
+    def auto_plot_control_polygon(self, control_points: List[ControlPoint]):
         x = []
         y = []
         
@@ -116,7 +122,10 @@ class MainWindow(QtWidgets.QMainWindow):
             y.append(cp.y)
 
         pen = pg.mkPen(color='b', width=1)
-        self.graphWidget.plot(x, y, pen=pen)
+        self.graphWidget.plot(x, y, pen=pen, name='Control Polygon')
+
+    def manual_plot_control_polygon(self, control_points:List[ControlPoint]):
+        self.auto_plot_control_polygon(control_points)
 
     def auto_plot_curve(self, points: List[List[int]]):
         self.graphWidget.clear()
@@ -125,8 +134,8 @@ class MainWindow(QtWidgets.QMainWindow):
         p_y = points[1]
 
         b_curve_pen = pg.mkPen('r', width=2)
-        self.graphWidget.plot(p_x, p_y, pen=b_curve_pen)
-        self.plot_control_polygon(self.b_curve.points)
+        self.graphWidget.plot(p_x, p_y, pen=b_curve_pen, name='B-Spline Curve')
+        self.auto_plot_control_polygon(self.b_curve.points)
 
     def manual_plot_curve(self):
         self.graphWidget.clear()
@@ -135,8 +144,8 @@ class MainWindow(QtWidgets.QMainWindow):
         p_y = self.b_curve.p_y
 
         pen = pg.mkPen('r', width=2)
-        self.graphWidget.plot(p_x, p_y, pen=pen)
-        self.plot_control_polygon(self.b_curve.points)
+        self.graphWidget.plot(p_x, p_y, pen=pen, name='B-Spline Curve')
+        self.manual_plot_control_polygon(self.b_curve.points)
 
     def set_continuous_update(self, val):
         self.continuous_update = bool(val)
@@ -154,6 +163,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def update_knot_vector(self, knot_vector: str):
         self.lineEdit_KnotVector.setText(knot_vector)
+
+    def update_failure_message(self, msg: str):
+        self.lbl_FailureMessage.setText(msg)
 
     @staticmethod
     def exit_program(self):

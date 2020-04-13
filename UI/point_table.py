@@ -14,6 +14,9 @@ class PointTable(QtWidgets.QTableWidget):
                      'Point 9', 'Point 10']
 
     table_value_changed = pyqtSignal(list)
+    failure_message = pyqtSignal(str)
+
+    table_valid = True
 
     def __init__(self, table_widget: QtWidgets.QTableWidget):
         super(PointTable, self).__init__()
@@ -30,7 +33,7 @@ class PointTable(QtWidgets.QTableWidget):
 
         self.table.itemChanged.connect(self.update_graph)
 
-    def update_graph(self):
+    def update_graph(self, cell_item: QtWidgets.QTableWidgetItem):
         cp_list = self.get_control_points()
 
         if len(cp_list) <= 2:
@@ -82,9 +85,10 @@ class PointTable(QtWidgets.QTableWidget):
                 y_val = self.table.item(i, 2).text()
                 if x_val == '' or y_val == '':
                     continue
-            except (AttributeError, ValueError):
+            except (AttributeError, ValueError) as e:
                 continue
-            ctrl_pt = ControlPoint(int(x_val), int(y_val))
+
+            ctrl_pt = ControlPoint(float(x_val), float(y_val))
             cp_list.append(ctrl_pt)
 
         return cp_list

@@ -10,6 +10,7 @@ class BSplineCurve(QtWidgets.QWidget):
     knot_vector_changed = pyqtSignal(str)
     curve_points_changed = pyqtSignal(list)
     k_value_changed = pyqtSignal(int)
+    failure_message = pyqtSignal(str)
 
     def __init__(self, points: List[ControlPoint], k=3):
         super(BSplineCurve, self).__init__()
@@ -77,9 +78,14 @@ class BSplineCurve(QtWidgets.QWidget):
             print('attribute error')
             return
 
+        if self.k_value > len(self.points):
+            self.failure_message.emit("not enough points for order of curve")
+            return
+
         self.create_knot_vector()
         self.create_blending_function_array()
         self.get_curve_points()
+        self.failure_message.emit('')
 
     def create_knot_vector(self):
         """
