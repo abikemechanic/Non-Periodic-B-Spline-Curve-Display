@@ -107,16 +107,22 @@ class MainWindow(QtWidgets.QMainWindow):
     def clear_control_point_table(self):
         self.table_ControlPoints.clear()
 
+        # Create new BSplineCurve object to clear the old one
+        self.b_curve = BSplineCurve(None, self.k)
+        self.b_curve.knot_vector_changed.connect(self.update_knot_vector)
+        self.b_curve.curve_points_changed.connect(self.auto_plot_curve)
+        self.b_curve.failure_message.connect(self.update_failure_message)
+
     def generate_random_points(self):
         self.table_ControlPoints.generate_random_control_points()
-
-    # def update_graph(self):
-    #     self.b_curve.create_b_spline_curve()
 
     def auto_plot_control_polygon(self, control_points: List[ControlPoint]):
         x = []
         y = []
-        
+
+        if not control_points:
+            return
+
         for cp in control_points:
             x.append(cp.x)
             y.append(cp.y)

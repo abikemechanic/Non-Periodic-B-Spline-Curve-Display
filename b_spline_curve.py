@@ -178,3 +178,6 @@ class BSplineCurve(QtWidgets.QWidget):
 
     def k_value_changed(self, k):
         self.k_value = k
+
+    def clear_control_points(self):
+        self.points = None
